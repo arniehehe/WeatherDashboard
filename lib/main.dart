@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WeatherPage(),
     );
@@ -24,96 +24,113 @@ class WeatherPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[300],
 
-      body: Column(
-        children: [
-          const SizedBox(height: 50),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Weather Dashboard",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
 
-          // TITLE
-          const Text(
-            "Weather Dashboard",
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-          ),
+              const SizedBox(height: 20),
 
-          const SizedBox(height: 20),
-
-          // MAIN CARD
-          Container(
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              children: [
-                // TOP WEATHER INFO
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              // MAIN CARD
+              Container(
+                width: 350,
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
                   children: [
-                    const Icon(Icons.wb_cloudy, size: 80, color: Colors.orange),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "25°C",
-                          style: TextStyle(
-                              fontSize: 40, fontWeight: FontWeight.bold),
+                    // TOP WEATHER INFO
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Icon(
+                          Icons.wb_cloudy,
+                          size: 80,
+                          color: Colors.orange,
                         ),
-                        Text("Cloudy with a chance of sunshine"),
-                        Text("London, UK"),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "25°C",
+                              style: TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text("Cloudy with a chance of sunshine"),
+                            Text("London, UK"),
+                          ],
+                        )
                       ],
-                    )
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // GRID
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: GridView.count(
+                        crossAxisCount: 4,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        children: const [
+                          WeatherBox("10:00", "26°C", Icons.wb_sunny),
+                          WeatherBox("11:00", "27°C", Icons.wb_sunny),
+                          WeatherBox("12:00", "25°C", Icons.cloud),
+                          WeatherBox("13:00", "24°C", Icons.cloud),
+                          WeatherBox("14:00", "25°C", Icons.wb_sunny),
+                          WeatherBox("15:00", "24°C", Icons.grain),
+                          WeatherBox("16:00", "23°C", Icons.cloud),
+                          WeatherBox("17:00", "22°C", Icons.grain),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-
-                const SizedBox(height: 20),
-
-                // GRID
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: GridView.count(
-                    crossAxisCount: 4,
-                    shrinkWrap: true,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    children: const [
-                      WeatherBox("10:00", "26°C", Icons.wb_sunny),
-                      WeatherBox("11:00", "27°C", Icons.wb_sunny),
-                      WeatherBox("12:00", "25°C", Icons.cloud),
-                      WeatherBox("13:00", "24°C", Icons.cloud),
-
-                      WeatherBox("14:00", "25°C", Icons.wb_sunny),
-                      WeatherBox("15:00", "24°C", Icons.grain),
-                      WeatherBox("16:00", "23°C", Icons.cloud),
-                      WeatherBox("17:00", "22°C", Icons.grain),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
 
-      // BOTTOM NAVIGATION
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
+      // CENTERED BOTTOM NAVIGATION
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            NavItem(icon: Icons.home, label: "Home"),
+            SizedBox(width: 30),
+            NavItem(icon: Icons.search, label: "Search"),
+            SizedBox(width: 30),
+            NavItem(icon: Icons.person, label: "Profile"),
+          ],
+        ),
       ),
     );
   }
 }
 
-// SMALL BOX WIDGET
+// WEATHER BOX
 class WeatherBox extends StatelessWidget {
   final String time;
   final String temp;
@@ -142,6 +159,28 @@ class WeatherBox extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// CUSTOM NAV ITEM
+class NavItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const NavItem({super.key, required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: Colors.grey[700]),
+        Text(
+          label,
+          style: TextStyle(color: Colors.grey[700]),
+        ),
+      ],
     );
   }
 }
