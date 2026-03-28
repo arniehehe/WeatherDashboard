@@ -92,6 +92,7 @@ class WeatherPage extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
+                        childAspectRatio: 0.75, // ✅ FIXED OVERFLOW
                         children: const [
                           WeatherBox("10:00", "26°C", Icons.wb_sunny),
                           WeatherBox("11:00", "27°C", Icons.wb_sunny),
@@ -145,24 +146,35 @@ class WeatherBox extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(6),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(time),
-          const SizedBox(height: 5),
-          Icon(icon, color: Colors.orange),
-          const SizedBox(height: 5),
+          Text(
+            time,
+            style: const TextStyle(fontSize: 12), // ✅ smaller text
+          ),
+          const SizedBox(height: 4),
+          Icon(
+            icon,
+            size: 18, // ✅ smaller icon
+            color: Colors.orange,
+          ),
+          const SizedBox(height: 4),
           Text(
             temp,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
     );
   }
 }
-// CUSTOM NAV ITEM
+
+// NAV ITEM
 class NavItem extends StatelessWidget {
   final IconData icon;
   final String label;
