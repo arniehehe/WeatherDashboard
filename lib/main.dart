@@ -162,7 +162,6 @@ class WeatherBox extends StatelessWidget {
     );
   }
 }
-
 // CUSTOM NAV ITEM
 class NavItem extends StatelessWidget {
   final IconData icon;
